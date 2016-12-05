@@ -4,118 +4,90 @@ import java.util.Scanner;
 
 public class CashRegister {
 	static Scanner kb = new Scanner(System.in);
+
 	public static void main(String[] args) {
 		double price, payment, change;
-		
-		price = itemPrice("Enter the price of the item: ");
-		
-		payment = moneyTendered("Enter amount paid: ");
-		
-		change = enoughPaid(payment, price);
-		
-		changeReturned(change);
-		
+
+			price = itemPrice("\nEnter the price of the item: ");
+
+			payment = moneyTendered("\nEnter amount paid: ");
+
+			change = enoughPaid(payment, price);
+
+			changeReturned(change);
+
+		kb.close();
+
 	}
-	
-	public static double itemPrice(String prompt){
+
+	public static double itemPrice(String prompt) {
 		System.out.println(prompt);
+		System.out.print("> ");
 		double price = kb.nextDouble();
-		while (!(price >= 0)){
-			System.err.println("Error! Please enter a positive value (or 0 if free item): ");
+		while (!(price >= 0)) {
+			System.err.println("\n\nError! Please enter a positive value (or 0 if free item): ");
+			System.out.print("> ");
 			price = kb.nextDouble();
 		}
 		return price;
 	}
-	
-	public static double moneyTendered(String prompt){
+
+	public static double moneyTendered(String prompt) {
 		System.out.println(prompt);
+		System.out.print("> ");
 		double money = kb.nextDouble();
-		if (!(money >= 0)){
-			System.err.println("Panic button pressed, Police enroute!");
+		if (!(money >= 0)) {
+			System.err.println("\n\n\n\nPanic button pressed, Police enroute!\n\n\n\n");
 		}
 		return money;
 	}
-	
-	public static double enoughPaid(double payment, double price){
-		while (payment < price){
-			System.err.println("Error! Amount paid too low!");
+
+	public static double enoughPaid(double payment, double price) {
+		while (payment < price) {
+			System.err.println("\n\nError! Amount paid too low!");
 			System.err.println("Please enter payment again(MUST BE AT LEAST ITEM PRICE): ");
+			System.out.print("> ");
 			payment = kb.nextDouble();
-			if (!(payment >= 0)){
-				System.err.println("Panic button pressed, Police enroute!");
+			if (!(payment >= 0)) {
+				System.err.println("\n\n\n\nPanic button pressed, Police enroute!\n\n\n\n");
+				break;
 			}
 		}
-		if (payment == price){
-			System.out.println("Exact amount paid!");
-			System.out.println("Thank You, Have A Nice Day!");
+		if (payment == price) {
+			System.out.println("\n\nExact amount paid!");
+			System.out.println("Thank You, Have A Nice Day!\n\n");
 			return 0;
-		}
-		else {
+		} else {
 			double change = payment - price;
 			return change;
 		}
-		
+
 	}
-	public static void changeReturned(double change){
-		int hundreds = 100;
-		int fifties = 50;
-		int twenties = 20;
-		int tens = 10;
-		int fives = 5;
-		int singles = 1;
-		double quarters = .25;
-		double dimes = .10;
-		double nickels = .05;
-		double pennies = .009;
-		
-		System.out.println("Change: ");
-		if (change > hundreds){					// Finds if any units of current size can be given as change
-			System.out.print("Hundreds: ");
-			change = howMany(change, hundreds);
+
+	public static void changeReturned(double change) {
+		double[] denom = { 100, 50, 20, 10, 5, 1, .25, .1, .05, .009 };
+		String[] billName = { "Hundreds", "Fifties\t", "Twenties", "Tens\t", "Fives\t", "Singles\t", "Quarters",
+				"Dimes\t", "Nickels\t", "Pennies\t" };
+
+		System.out.println("\n\n\n\tChange: ");
+		System.out.println("-------------------------");
+
+		for (int i = 0; i < denom.length; i++) {
+			if (change >= denom[i]) {
+				System.out.print(billName[i]);
+				change = howMany(change, denom[i]);
+			}
 		}
-		if (change > fifties){	
-			System.out.print("Fifties: ");
-			change = howMany(change, fifties);
-		}
-		if (change > twenties){	
-			System.out.print("Twenties: ");
-			change = howMany(change, twenties);
-		}
-		if (change > tens){	
-			System.out.print("Tens: ");
-			change = howMany(change, tens);
-		}
-		if (change > fives){	
-		System.out.print("Fives: ");
-		change = howMany(change, fives);
-		}
-		if (change > singles){	
-		System.out.print("Singles: ");
-		change = howMany(change, singles);
-		}
-		if (change > quarters){	
-		System.out.print("Quarters: ");
-		change = howMany(change, quarters);
-		}
-		if (change > dimes){	
-		System.out.print("Dimes: ");
-		change = howMany(change, dimes);
-		}
-		if (change > nickels){	
-		System.out.print("Nickels: ");
-		change = howMany(change, nickels);
-		}
-		if (change > pennies){	
-		System.out.print("Pennies: ");
-		change = howMany(change, pennies);
-		}
-		
+
+		System.out.println("\n\n");
+
 	}
-		public static double howMany(double change, double units){
-			double money = units;
-				units = (int) (change / units);		// Finds how many units of current size to give and casts to whole number
-				change = change - (units * money);	// Finds remaining change
-				System.out.println(units);
+
+	public static double howMany(double change, double units) {
+		double money = units;
+		units = (int) (change / units);
+		change %= money;
+		System.out.println("\t\t" + (int) units);
 		return change;
-		}
+	}
 }
